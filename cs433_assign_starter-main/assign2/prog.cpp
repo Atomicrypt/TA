@@ -2,7 +2,7 @@
 /**
  * Assignment 2: Simple UNIX Shell
  * @file pcbtable.h
- * @author ??? (TODO: your name)
+ * @author Alex Nelson, Tyler Felicidario
  * @brief This is the main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
  * @version 0.1
  */
@@ -10,16 +10,19 @@
 // Remember to add sufficient and clear comments to your code
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <iostream>
 #include <fcntl.h>
 #include <cstring>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+
 
 using namespace std;
-
-#define MAX_LINE 80 // The maximum length command
+/*The maximum length command*/
+#define MAX_LINE 80 
 
 /**
  * @brief parse out the command and arguments from the input command separated by spaces
@@ -49,6 +52,23 @@ int main(int argc, char *argv[])
 
     // TODO: Add additional variables for the implementation.
 
+    pid_t pid;   //process id type, process id
+    pid = fork();  //fork a child process
+
+    if (pid < 0){  //error occurred
+      fprintf(stderr, "Fork failed");
+      return 1;
+    }
+    else if(pid == 0){  //child process
+      execlp("/bin/ls","ls",NULL);  //execute "ls" command
+      // int status_code = execvp(command, args);  //new child process taken over by "ls -l"
+    }
+    else{  //parent process
+      //parent will wait for the child to complete
+      wait(NULL);
+      printf("Child Complete\n");
+    }
+
     while (should_run)
     {
         printf("osh>");
@@ -61,10 +81,11 @@ int main(int argc, char *argv[])
         // TODO: Add your code for the implementation
         /**
          * After reading user input, the steps are:
-         * (1) fork a child process using fork()
+         * (1) fork a child process using fork() #########DONE#########
          * (2) the child process will invoke execvp()
          * (3) parent will invoke wait() unless command included &
          */
+
     }
     return 0;
 }
