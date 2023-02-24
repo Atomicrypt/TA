@@ -53,7 +53,7 @@ int parse_command(char command[], char *args[])
       else if (*token == '&') { // checks if token is '&'
       }
       else {
-        args[count] = token;
+        args[count] = token;  //argument at index gets token
       }
       count++;
     }
@@ -105,8 +105,8 @@ int main(int argc, char *argv[])
         // TODO: Add your code for the implementation
         /**
          * After reading user input, the steps are:
-         * (1) fork a child process using fork() #########DONE#########
-         * (2) the child process will invoke execvp()
+         * (1) fork a child process using fork() #########CURRENT#########
+         * (2) the child process will invoke execvp()2
          * (3) parent will invoke wait() unless command included &
          */
 
