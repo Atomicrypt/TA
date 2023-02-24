@@ -34,6 +34,30 @@ using namespace std;
 int parse_command(char command[], char *args[])
 {
     // TODO: implement this function
+    int count = 0; // index for each char of the command line argument
+    char *token = strtok(command, " "); // creates array of spaces for command line arg
+
+    while (token != NULL) { 
+      if (*token == '<') { // checks if char token is '<'
+        int out = open(strtok(NULL, " "), O_WRONLY | O_TRUNC | O_CREAT, 0600);
+        dup2(out, 1);
+        close(out);
+      }
+      else if (*token == '>') { // checks if token is '>'
+        int in = open(strtok(NULL, " "), O_RDONLY);
+        dup2(in, 0);
+        close(in);
+      }
+      else if (*token == '|') { // checks if token is '|'
+      }
+      else if (*token == '&') { // checks if token is '&'
+      }
+      else {
+        args[count] = token;
+      }
+      count++;
+    }
+    token = strtok(NULL, " "); // read each token that isn't a space
 }
 
 // TODO: Add additional functions if you need
