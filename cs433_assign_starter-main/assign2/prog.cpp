@@ -34,10 +34,32 @@ using namespace std;
 int parse_command(char command[], char *args[])
 {
     // TODO: implement this function
+
+    pid_t pid;   //process id type, process id
+    pid = fork();  //fork a child process
+
+    if (pid < 0){  //error case
+      fprintf(stderr, "Fork failed");
+      return 1;
+    }
+    else if(pid == 0){  //child process
+
+    //list files/directories if command is "ls"
+      if(command[0] != 'l' || command[1] != 's'){ 
+        printf("unrecognized command\n");
+      }else{
+        execlp("/bin/ls","ls",NULL);  //execute "ls" command 
+      }
+    }
+    else{  //parent process waits for next command
+      wait(NULL);
+    }
+    
+
     int count = 0; // index for each char of the command line argument
     char *token = strtok(command, " "); // creates array of spaces for command line arg
 
-    while (token != NULL) { 
+    while (token != NULL && count != 50) { 
       if (*token == '<') { // checks if char token is '<'
         int out = open(strtok(NULL, " "), O_WRONLY | O_TRUNC | O_CREAT, 0600);
         dup2(out, 1);
@@ -58,6 +80,7 @@ int parse_command(char command[], char *args[])
       count++;
     }
     token = strtok(NULL, " "); // read each token that isn't a space
+    return 0;
 }
 
 // TODO: Add additional functions if you need
@@ -75,24 +98,6 @@ int main(int argc, char *argv[])
     int should_run = 1;           /* flag to determine when to exit program */
 
     // TODO: Add additional variables for the implementation.
-
-    pid_t pid;   //process id type, process id
-    pid = fork();  //fork a child process
-
-    if (pid < 0){  //error occurred
-      fprintf(stderr, "Fork failed");
-      return 1;
-    }
-    else if(pid == 0){  //child process
-      execlp("/bin/ls","ls",NULL);  //execute "ls" command
-      // int status_code = execvp(command, args);  //new child process taken over by "ls -l"
-    }
-    else{  //parent process
-      //parent will wait for the child to complete
-      wait(NULL);
-      printf("Child Complete\n");
-    }
-
     while (should_run)
     {
         printf("osh>");
