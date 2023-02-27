@@ -1,4 +1,3 @@
-
 /**
  * Assignment 2: Simple UNIX Shell
  * @file pcbtable.h
@@ -35,26 +34,27 @@ int parse_command(char command[], char *args[])
 {
     // TODO: implement this function
 
-    pid_t pid;   //process id type, process id
-    pid = fork();  //fork a child process
+    pid_t pid;   // process id type, process id
+    pid = fork();  // fork a child process
 
-    if (pid < 0){  //error case
+    if (pid < 0) {  // error case
       fprintf(stderr, "Fork failed");
       return 1;
     }
-    else if(pid == 0){  //child process
+    else if (pid == 0)
+    {   // child process
 
-    //list files/directories if command is "ls"
-      if(command[0] != 'l' || command[1] != 's'){ 
+      // list files/directories if command is "ls"
+      if (command[0] != 'l' || command[1] != 's') {
         printf("unrecognized command\n");
-      }else{
-        execlp("/bin/ls","ls",NULL);  //execute "ls" command 
+      }
+      else {
+        execlp("/bin/ls","ls",NULL);  // execute "ls" command 
       }
     }
-    else{  //parent process waits for next command
+    else {  // parent process waits for next command
       wait(NULL);
     }
-    
 
     int count = 0; // index for each char of the command line argument
     char *token = strtok(command, " "); // creates array of spaces for command line arg
@@ -75,7 +75,7 @@ int parse_command(char command[], char *args[])
       else if (*token == '&') { // checks if token is '&'
       }
       else {
-        args[count] = token;  //argument at index gets token
+        args[count] = token;  // argument at index gets token
       }
       count++;
     }
