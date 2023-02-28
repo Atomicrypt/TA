@@ -22,7 +22,7 @@
 using namespace std;
 /*The maximum length command*/
 #define MAX_LINE 80 
-// test
+
 /**
  * @brief parse out the command and arguments from the input command separated by spaces
  *
@@ -71,8 +71,12 @@ int parse_command(char command[], char *args[])
         close(in);
       }
       else if (*token == '|') { // checks if token is '|'
+        int pipe = open(strtok(NULL, " "), O_WRONLY);
+        dup2(pipe, 0);
+        close(pipe);
       }
       else if (*token == '&') { // checks if token is '&'
+        int amp = open(strtok(NULL, " "), O_WRONLY);
       }
       else {
         args[count] = token;  // argument at index gets token
