@@ -33,29 +33,6 @@ using namespace std;
 int parse_command(char command[], char *args[])
 {
     // TODO: implement this function
-
-    pid_t pid;   // process id type, process id
-    pid = fork();  // fork a child process
-
-    if (pid < 0) {  // error case
-      fprintf(stderr, "Fork failed");
-      return 1;
-    }
-    else if (pid == 0)
-    {   // child process
-
-      // list files/directories if command is "ls"
-      if (command[0] != 'l' || command[1] != 's') {
-        printf("unrecognized command\n");
-      }
-      else {
-        execlp("/bin/ls","ls",NULL);  // execute "ls" command 
-      }
-    }
-    else {  // parent process waits for next command
-      wait(NULL);
-    }
-
     int count = 0; // index for each char of the command line argument
     char *token = strtok(command, " "); // creates array of spaces for command line arg
 
@@ -97,30 +74,49 @@ int parse_command(char command[], char *args[])
  * @param argv The array of arguments
  * @return The exit status of the program
  */
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     int should_run = 1;           /* flag to determine when to exit program */
 
     // TODO: Add additional variables for the implementation.
-    while (should_run)
-    {
-        printf("osh>");
-        fflush(stdout);
-        // Read the input command
-        fgets(command, MAX_LINE, stdin);
-        // Parse the input command
-        int num_args = parse_command(command, args);
+    while (should_run) {
+      printf("osh>");
+      fflush(stdout); // clears output buffer and prints everything
+      // Read the input command
+      fgets(command, MAX_LINE, stdin);
+      // Parse the input command
+      int num_args = parse_command(command, args);
 
-        // TODO: Add your code for the implementation
-        /**
-         * After reading user input, the steps are:
-         * (1) fork a child process using fork() #########CURRENT#########
-         * (2) the child process will invoke execvp()2
-         * (3) parent will invoke wait() unless command included &
-         */
+      // TODO: Add your code for the implementation
+      //**
+      // * After reading user input, the steps are:
+      // * (1) fork a child process using fork() #########CURRENT#########
+      pid_t pid = fork(); // Fork a process; creates copy of main process
 
+      if (pid == 0) { // if process is a child process..
+        // child process
+        // list files/directories if command is "ls"
+        if (command[0] != 'l' || command[1] != 's') {
+          printf("unrecognized command\n");
+        }
+        else {
+          execlp("/bin/ls","ls",NULL);  // execute "ls" command 
+        }
+      }
+      else if (pid < 0) {
+        // error case
+        fprintf(stderr, "Fork failed");
+        return 1;
+      }
+      
+      else {  // parent process waits for next command
+        wait(NULL);
+      }
+        // * (2) the child process will invoke execvp()2
+        // * (3) parent will invoke wait() unless command included &
+        // *
     }
+    
     return 0;
 }
