@@ -34,28 +34,6 @@ int parse_command(char command[], char *args[])
 {
     // TODO: implement this function
 
-    pid_t pid;   // process id type, process id
-    pid = fork();  // fork a child process
-
-    if (pid < 0) {  // error case
-      fprintf(stderr, "Fork failed");
-      return 1;
-    }
-    else if (pid == 0)
-    {   // child process
-
-      // list files/directories if command is "ls"
-      if (command[0] != 'l' || command[1] != 's') {
-        printf("unrecognized command\n");
-      }
-      else {
-        execlp("/bin/ls","ls",NULL);  // execute "ls" command 
-      }
-    }
-    else {  // parent process waits for next command
-      wait(NULL);
-    }
-
     int count = 0; // index for each char of the command line argument
     char *token = strtok(command, " "); // creates array of spaces for command line arg
 
@@ -121,6 +99,24 @@ int main(int argc, char *argv[])
          * (3) parent will invoke wait() unless command included &
          */
 
+    pid_t pid;   // process id type, process id
+    pid = fork();  // fork a child process
+
+    if (pid < 0)
+    {  // error case
+      fprintf(stderr, "Fork failed");
+      return 1;
+    }
+    else if (pid == 0)
+    {   // child process
+      if(execvp(argv[0], argv) < 0){
+        printf("\n could not execute command");
+      }
+      exit(0);
+    }
+    else {  // parent process waits for child to terminate
+      wait(NULL);
+    }
     }
     return 0;
 }
