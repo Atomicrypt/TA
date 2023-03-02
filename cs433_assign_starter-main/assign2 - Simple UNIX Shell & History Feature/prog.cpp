@@ -255,7 +255,7 @@ int main(int argc, char *argv[]) {
           //removal of IO char and output file since its already open
           args[num_args - 1] = NULL;
           args[num_args] = NULL;
-          //open file of the specified file descriptior
+          //open file of the specified file descriptor
           if(ioType == 'o'){
           dup2(fileDescriptor, ioType = 'o');
           } else{
