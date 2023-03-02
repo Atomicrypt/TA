@@ -138,12 +138,12 @@ int parse_command(char command[], char *args[])
  * @return true/false
  */
 bool checkIO(char *args[], int num_args, char &type){
-for(int i = 0; i <= num_args; i++){
+for(int i = 0; i <= num_args; i++) {
   if(strcmp(args[i], ">") == 0){
     type = 'o'; //o for output, writing to file
     return true;
   }
-  else if(strcmp(args[i], "<") == 0){
+  else if(strcmp(args[i], "<") == 0) {
     type = 'i'; //i for input, read from file
     return true;
   }
@@ -158,9 +158,9 @@ for(int i = 0; i <= num_args; i++){
  * @param num_args number of arguments
  * @return true/false
  */
-bool checkAmp(char *args[], int num_args){
-  for(int i = 0; i <= num_args; i++){
-    if(strcmp(args[i], "&") == 0){
+bool checkAmp(char *args[], int num_args) {
+  for(int i = 0; i <= num_args; i++) {
+    if(strcmp(args[i], "&") == 0) {
       return true;
     }
   }
@@ -174,9 +174,9 @@ bool checkAmp(char *args[], int num_args){
  * @param num_args number of arguments
  * @return true/false
  */
-bool checkPipe(char *args[], int num_args){
-  for(int i = 0; i <= num_args; i++){
-    if(strcmp(args[i], "|") == 0){
+bool checkPipe(char *args[], int num_args) {
+  for(int i = 0; i <= num_args; i++) {
+    if(strcmp(args[i], "|") == 0) {
       return true;
     }
   }
@@ -207,17 +207,20 @@ int main(int argc, char *argv[]) {
       // Parse the input command
       int num_args = parse_command(command, args);
 
-      if(strcmp(args[0], "exit") == 0){ //exit program
+      if(strcmp(args[0], "exit") == 0) { //exit program
         should_run = false;
         return 0;
-      } else if(strcmp(args[0], "history") == 0){
+      } 
+      else if(strcmp(args[0], "history") == 0) {
         shellHistory.display();
         continue;
-      } else if(strcmp(args[0], "!!") == 0){
+      } 
+      else if(strcmp(args[0], "!!") == 0) {
         char * prevCmd = shellHistory.previous(); //get history if it exists
-        if(prevCmd != NULL){
+        if(prevCmd != NULL) {
           cout << prevCmd << endl;//print previous command
-        }else{
+        }
+        else {
           continue;
         }
         
@@ -241,26 +244,29 @@ int main(int argc, char *argv[]) {
       {   // child process
         char ioType = ' ';  //empty char initializer
         if(checkIO(args,num_args, ioType)){ //check for ">" or "<" in argument array
-          if(num_args == 1){
+          if(num_args == 1) {
             printf("missing file argument\n");
             exit(1);
           }
-          //redirect output to newly created file if one does not exist already
-          if(ioType =='o'){ 
+          // redirect output to newly created file if one does not exist already
+          if(ioType =='o') { 
             fileDescriptor = open(args[num_args], O_WRONLY|O_CREAT, 0777);
-          } else  //ioType is input
-          { 
+            dup2(fileDescriptor, STDOUT_FILENO);
+          } 
+          else {  // ioType is input
             fileDescriptor = open(args[num_args], O_RDONLY);
+            dup2(fileDescriptor, STDIN_FILENO);
           }
           //removal of IO char and output file since its already open
           args[num_args - 1] = NULL;
           args[num_args] = NULL;
           //open file of the specified file descriptior
-          dup2(fileDescriptor, ioType = 'o');
+          
+          
         }
         //successful process should return 0, else -1
         int procStatus = execvp(args[0], args);
-        if(procStatus == -1){
+        if(procStatus == -1) {
           printf("Command not found\n");
         }
         exit(0);
