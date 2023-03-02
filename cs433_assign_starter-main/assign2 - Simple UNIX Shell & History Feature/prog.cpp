@@ -86,7 +86,7 @@ class history {
      */
     char *previous() {
         if (count == 0) {
-            cout << "No commands in history." << endl;
+            cout << "No command history found." << endl;
             return NULL; // history is empty
         }
         return log[count - 1];
@@ -97,7 +97,7 @@ class history {
     void display() {
         // Iterate through log
         if (count == 0) {
-            cout << "No commands in history." << endl;
+            cout << "No command history found." << endl;
             return;
         }
         for (unsigned int i = 0; i < count; i++) {
