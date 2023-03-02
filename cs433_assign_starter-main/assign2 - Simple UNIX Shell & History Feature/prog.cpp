@@ -256,7 +256,11 @@ int main(int argc, char *argv[]) {
           args[num_args - 1] = NULL;
           args[num_args] = NULL;
           //open file of the specified file descriptior
+          if(ioType == 'o'){
           dup2(fileDescriptor, ioType = 'o');
+          } else{
+            dup2(fileDescriptor, ioType = 'i');
+          }
         }
         //successful process should return 0, else -1
         int procStatus = execvp(args[0], args);
