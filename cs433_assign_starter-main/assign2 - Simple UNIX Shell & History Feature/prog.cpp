@@ -22,51 +22,166 @@
 using namespace std;
 /*The maximum length command*/
 #define MAX_LINE 80 
+#define MAX_HISTORY 100 // The maximum number of commands to be stored in history
+
+/**
+ * @brief Class to access history based on previous command inputs
+ */
+class history {
+  private:
+    char *log[MAX_HISTORY] = {}; // History log
+    int count; // The current number of elements in the log
+
+    /**
+     * @brief When the history overflows, replace the old commands
+     */
+    void shiftLog() {
+        // Shift the log to erase older commands
+        for (int i = 0; i < MAX_HISTORY - 1; i++) {
+            log[i] = log[i + 1];
+        }
+    }
+
+  public:
+    
+    // Default constructor
+    history() { 
+      count = 0;
+    }
+
+    /**
+     * @brief Adds to the history
+     *
+     * @param args command line arguments
+     * @param num_args  number of arguments
+     */
+    void add(char *args[], int num_args) {
+        if (count == MAX_HISTORY) { // If the number of elements is greater than history, need to shift the array
+            shiftLog();
+            count--; // Decrement the count so that it can be added to the last index
+        }
+        char command[MAX_LINE] = {};
+        strcat(command, args[0]); // Append the command (no space)
+        for (int i = 1; i <= num_args; i++) { // <= since numberOfArgs excludes the command
+            strcat(command, " "); // Add a space
+            strcat(command, args[i]); // Append the arguments 
+        }
+        // Combine the args
+        log[count] = strdup(command); // Set the log
+        count++;   // Increment the count
+    }
+
+    /**
+     * @brief Function clears the history
+     */
+    void clear() {
+        for (unsigned int i = 0; i < MAX_HISTORY; i++) {
+            log[i] = NULL;
+        }
+        count = 0;
+    }
+
+    /**
+     * @brief Returns the previous command
+     */
+    char *previous() {
+        if (count == 0) {
+            cout << "Shell history empty" << endl;
+            return NULL; // history is empty
+        }
+        return log[count - 1];
+    }
+    /**
+     * @brief Displays the commands (oldest at the top to most recent at the bottom)
+     */
+    void display() {
+        // Iterate through log
+        if (count == 0) {
+            cout << "History is empty." << endl;
+            return;
+        }
+        for (unsigned int i = 0; i < count; i++) {
+            cout << i + 1 << ": " << log[i] << endl;
+        }
+    }
+};
 
 /**
  * @brief parse out the command and arguments from the input command separated by spaces
  *
- * @param command
- * @param args
+ * @param command command line
+ * @param args command line arguments
  * @return int
  */
 int parse_command(char command[], char *args[])
 {
     // TODO: implement this function
+
     int count = 0; // index for each char of the command line argument
     char *token = strtok(command, " "); // creates array of spaces for command line arg
-
-    while (token != NULL && count != 50) { 
-      if (*token == '<') { // checks if char token is '<'
-        int out = open(strtok(NULL, " "), O_WRONLY | O_TRUNC | O_CREAT, 0600);
-        dup2(out, 1);
-        close(out);
-      }
-      else if (*token == '>') { // checks if token is '>'
-        int in = open(strtok(NULL, " "), O_RDONLY);
-        dup2(in, 0);
-        close(in);
-      }
-      else if (*token == '|') { // checks if token is '|'
-        int pipe = open(strtok(NULL, " "), O_WRONLY);
-        dup2(pipe, 0);
-        close(pipe);
-      }
-      else if (*token == '&') { // checks if token is '&'
-        int amp = open(strtok(NULL, " "), O_WRONLY);
-      }
-      else {
-        args[count] = token;  // argument at index gets token
-      }
-      count++;
+    //place args into args array
+    while (token != NULL) { //while accepting tokens
+      args[count++] = token;  //first command
+      token = strtok(NULL, " "); //get the rest of the args
     }
-    token = strtok(NULL, " "); // read each token that isn't a space
-    return 0;
+    args[count] = NULL; //terminate end of array
+    args[count - 1] = strtok(args[count - 1], "\n");  //remove trailing new line from last arg
+    return count - 1; //include all but command at index 0
 }
 
-// TODO: Add additional functions if you need
+/**
+ * @brief 
+ *
+ * @param args command line arguments
+ * @param num_args number of arguments
+ * @param type IO type
+ * @return true/false
+ */
+bool checkIO(char *args[], int num_args, char &type){
+for(int i = 0; i <= num_args; i++){
+  if(strcmp(args[i], ">") == 0){
+    type = 'o'; //o for output, writing to file
+    return true;
+  }
+  else if(strcmp(args[i], "<") == 0){
+    type = 'i'; //i for input, read from file
+    return true;
+  }
+}
+  return false;
+}
 
-// This is to cross branches
+/**
+ * @brief check if argument is file in/out
+ *
+ * @param args command line arguments
+ * @param num_args number of arguments
+ * @return true/false
+ */
+bool checkAmp(char *args[], int num_args){
+  for(int i = 0; i <= num_args; i++){
+    if(strcmp(args[i], "&") == 0){
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * @brief check if argument is pipe
+ *
+ * @param args command line arguments
+ * @param num_args number of arguments
+ * @return true/false
+ */
+bool checkPipe(char *args[], int num_args){
+  for(int i = 0; i <= num_args; i++){
+    if(strcmp(args[i], "|") == 0){
+      return true;
+    }
+  }
+  return false;
+}
 
 /**
  * @brief The main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
@@ -79,59 +194,85 @@ int main(int argc, char *argv[]) {
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     int should_run = 1;           /* flag to determine when to exit program */
 
-    // TODO: Add additional variables for the implementation.
+    history shellHistory = history();
+
     while (should_run) {
       printf("osh>");
       fflush(stdout); // clears output buffer and prints everything
       // Read the input command
-      fgets(command, MAX_LINE, stdin);
+      char * userInput = fgets(command, MAX_LINE, stdin); //get user input
+      if(strcmp(userInput, "\n") == 0) {  //enter button is pushed, do nothing
+        continue; 
+      }
       // Parse the input command
       int num_args = parse_command(command, args);
 
-      // TODO: Add your code for the implementation
-      //**
-      // * After reading user input, the steps are:
-      // * (1) fork a child process using fork() #########CURRENT#########
-      // * (2) the child process will invoke execvp()2
-      // * (3) parent will invoke wait() unless command included &
-      // *
-      pid_t pid = fork(); // Fork a process; creates copy of main process
+      if(strcmp(args[0], "exit") == 0){ //exit program
+        should_run = false;
+        return 0;
+      } else if(strcmp(args[0], "history") == 0){
+        shellHistory.display();
+        continue;
+      } else if(strcmp(args[0], "!!") == 0){
+        char * prevCmd = shellHistory.previous(); //get history if it exists
+        if(prevCmd == NULL){
+          continue;
+        }
+        //run previous command
+        strcpy(userInput, prevCmd);
+        strcat(userInput, "\n");  //add newline for parse command function
+        num_args = parse_command(command, args);  //repeat parse command function
+      }
 
-    if (pid < 0)
-    {  // error case
-      fprintf(stderr, "Fork failed");
-      return 1;
-    }
-    else if (pid == 0)
-    {   // child process
-      if(execvp(argv[0], argv) < 0){
-        printf("\n could not execute command");
-      }
-      exit(0);
-    }
-    else {  // parent process waits for child to terminate
-      wait(NULL);
-    }
-      if (pid == 0) { // if process is a child process..
-        // child process
-        // list files/directories if command is "ls"
-        if (command[0] != 'l' || command[1] != 's') {
-          printf("unrecognized command\n");
-        }
-        else {
-          execlp("/bin/ls","ls",NULL);  // execute "ls" command 
-        }
-      }
-      else if (pid < 0) {
-        // error case
+      shellHistory.add(args,num_args);
+
+      pid_t pid = fork(); //create child process
+      int fileDescriptor;
+
+      if (pid < 0)
+      {  // error case
         fprintf(stderr, "Fork failed");
-        return 1;
+        exit(1);
       }
-      
-      else {  // parent process waits for next command
+      else if (pid == 0)
+      {   // child process
+        char ioType = ' ';  //empty char initializer
+        if(checkIO(args,num_args, ioType)){ //check for ">" or "<" in argument array
+          if(num_args == 1){
+            printf("missing file argument\n");
+            exit(1);
+          }
+          //redirect output to newly created file if one does not exist already
+          if(ioType =='o'){ 
+            fileDescriptor = open(args[num_args], O_WRONLY|O_CREAT, 0777);
+          } else  //ioType is input
+          { 
+            fileDescriptor = open(args[num_args], O_RDONLY);
+          }
+          //removal of IO char and output file since its already open
+          args[num_args - 1] = NULL;
+          args[num_args] = NULL;
+          //open file of the specified file descriptior, 1 : 0
+          dup2(fileDescriptor, ioType = 'o' ? STDOUT_FILENO : STDIN_FILENO);
+        }
+        //successful process should return 0, else -1
+        int procStatus = execvp(args[0], args);
+        if(procStatus == -1){
+          printf("Command not found\n");
+        }
+        exit(0);
+      }
+      else{
         wait(NULL);
       }
+      
+      //**
+      // * After reading user input, the steps are:
+      // * (1) fork a child process using fork() #########DONE#########
+      // * (2) the child process will invoke execvp() #########DONE#########
+      // * (3) parent will invoke wait() unless command included &  #########DONE#########
+      // *
+
     }
-    
     return 0;
 }
