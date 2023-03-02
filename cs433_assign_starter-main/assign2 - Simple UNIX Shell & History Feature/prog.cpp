@@ -215,6 +215,7 @@ int main(int argc, char *argv[]) {
         continue;
       } else if(strcmp(args[0], "!!") == 0){
         char * prevCmd = shellHistory.previous(); //get history if it exists
+        cout << prevCmd << endl;
         if(prevCmd == NULL){
           continue;
         }
