@@ -22,14 +22,19 @@
 using namespace std;
 /*The maximum length command*/
 #define MAX_LINE 80 
-#define MAX_HISTORY 500 // The maximum number of commands to be stored in history
+#define MAX_HISTORY 100 // The maximum number of commands to be stored in history
 
+/**
+ * @brief Class to access history based on previous command inputs
+ */
 class history {
   private:
     char *log[MAX_HISTORY] = {}; // History log
     int count; // The current number of elements in the log
 
-    // When the history overflows, replace the old commands
+    /**
+     * @brief When the history overflows, replace the old commands
+     */
     void shiftLog() {
         // Shift the log to erase older commands
         for (int i = 0; i < MAX_HISTORY - 1; i++) {
@@ -38,12 +43,18 @@ class history {
     }
 
   public:
-
-    history() { // Default constructor
+    
+    // Default constructor
+    history() { 
       count = 0;
     }
 
-    // Adds to the history
+    /**
+     * @brief Adds to the history
+     *
+     * @param args command line arguments
+     * @param num_args  number of arguments
+     */
     void add(char *args[], int num_args) {
         if (count == MAX_HISTORY) { // If the number of elements is greater than history, need to shift the array
             shiftLog();
@@ -60,7 +71,9 @@ class history {
         count++;   // Increment the count
     }
 
-    // Function clears the history
+    /**
+     * @brief Function clears the history
+     */
     void clear() {
         for (unsigned int i = 0; i < MAX_HISTORY; i++) {
             log[i] = NULL;
@@ -68,7 +81,9 @@ class history {
         count = 0;
     }
 
-    // Returns the previous command
+    /**
+     * @brief Returns the previous command
+     */
     char *previous() {
         if (count == 0) {
             cout << "Shell history empty" << endl;
@@ -76,8 +91,9 @@ class history {
         }
         return log[count - 1];
     }
-
-    // Displays the commands (oldest at the top to most recent at the bottom)
+    /**
+     * @brief Displays the commands (oldest at the top to most recent at the bottom)
+     */
     void display() {
         // Iterate through log
         if (count == 0) {
@@ -93,8 +109,8 @@ class history {
 /**
  * @brief parse out the command and arguments from the input command separated by spaces
  *
- * @param command
- * @param args
+ * @param command command line
+ * @param args command line arguments
  * @return int
  */
 int parse_command(char command[], char *args[])
@@ -113,7 +129,14 @@ int parse_command(char command[], char *args[])
     return count - 1; //include all but command at index 0
 }
 
-
+/**
+ * @brief 
+ *
+ * @param args command line arguments
+ * @param num_args number of arguments
+ * @param type IO type
+ * @return true/false
+ */
 bool checkIO(char *args[], int num_args, char &type){
 for(int i = 0; i <= num_args; i++){
   if(strcmp(args[i], ">") == 0){
@@ -128,7 +151,13 @@ for(int i = 0; i <= num_args; i++){
   return false;
 }
 
-
+/**
+ * @brief check if argument is file in/out
+ *
+ * @param args command line arguments
+ * @param num_args number of arguments
+ * @return true/false
+ */
 bool checkAmp(char *args[], int num_args){
   for(int i = 0; i <= num_args; i++){
     if(strcmp(args[i], "&") == 0){
@@ -138,7 +167,13 @@ bool checkAmp(char *args[], int num_args){
   return false;
 }
 
-
+/**
+ * @brief check if argument is pipe
+ *
+ * @param args command line arguments
+ * @param num_args number of arguments
+ * @return true/false
+ */
 bool checkPipe(char *args[], int num_args){
   for(int i = 0; i <= num_args; i++){
     if(strcmp(args[i], "|") == 0){
@@ -147,19 +182,6 @@ bool checkPipe(char *args[], int num_args){
   }
   return false;
 }
-
-
-// // TODO: Add additional functions if you need
-
-// /**
-//  * @brief function to fork child process
-//  *
-//  * @param args the arguments
-//  */
-// void execArg( char * args[]){
-//   // Fork a process; creates copy of main process
-
-// }
 
 /**
  * @brief The main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
@@ -174,7 +196,6 @@ int main(int argc, char *argv[]) {
 
     history shellHistory = history();
 
-    // TODO: Add additional variables for the implementation.
     while (should_run) {
       printf("osh>");
       fflush(stdout); // clears output buffer and prints everything
@@ -245,7 +266,6 @@ int main(int argc, char *argv[]) {
         wait(NULL);
       }
       
-      // TODO: Add your code for the implementation
       //**
       // * After reading user input, the steps are:
       // * (1) fork a child process using fork() #########DONE#########
