@@ -193,6 +193,7 @@ int main(int argc, char *argv[]) {
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     bool should_run = true;           /* flag to determine when to exit program */
+    bool await_command = true; 
 
     history shellHistory = history();
 
@@ -231,6 +232,16 @@ int main(int argc, char *argv[]) {
       }
 
       shellHistory.add(args,num_args);
+
+      if (checkAmp(args, num_args)) {
+        // if ampersand exists, drop the last index
+        args[num_args] = NULL; // delete array and replace the ampersand
+        num_args--; // decrement number of arguments to uninclude ampersand if IO character exists
+        await_command = false; // flag to make shell not wait for child process to complete
+      }
+      else {
+        await_command = true; // flag to make shell wait for child process to complete
+      }
 
       pid_t pid = fork(); //create child process
       int fileDescriptor;
@@ -271,8 +282,9 @@ int main(int argc, char *argv[]) {
         }
         exit(0);
       }
-      else{
-        wait(NULL);
+      else {
+        if (await_command)
+          wait(NULL);
       }
       
       //**
