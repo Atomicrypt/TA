@@ -192,7 +192,7 @@ bool checkPipe(char *args[], int num_args) {
 int main(int argc, char *argv[]) {
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
-    int should_run = 1;           /* flag to determine when to exit program */
+    bool should_run = true;           /* flag to determine when to exit program */
 
     history shellHistory = history();
 
