@@ -92,8 +92,26 @@ int main(int argc, char *argv[]) {
       //**
       // * After reading user input, the steps are:
       // * (1) fork a child process using fork() #########CURRENT#########
+      // * (2) the child process will invoke execvp()2
+      // * (3) parent will invoke wait() unless command included &
+      // *
       pid_t pid = fork(); // Fork a process; creates copy of main process
 
+    if (pid < 0)
+    {  // error case
+      fprintf(stderr, "Fork failed");
+      return 1;
+    }
+    else if (pid == 0)
+    {   // child process
+      if(execvp(argv[0], argv) < 0){
+        printf("\n could not execute command");
+      }
+      exit(0);
+    }
+    else {  // parent process waits for child to terminate
+      wait(NULL);
+    }
       if (pid == 0) { // if process is a child process..
         // child process
         // list files/directories if command is "ls"
@@ -113,9 +131,6 @@ int main(int argc, char *argv[]) {
       else {  // parent process waits for next command
         wait(NULL);
       }
-        // * (2) the child process will invoke execvp()2
-        // * (3) parent will invoke wait() unless command included &
-        // *
     }
     
     return 0;
