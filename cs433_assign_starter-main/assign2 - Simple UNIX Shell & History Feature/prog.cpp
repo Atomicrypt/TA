@@ -97,7 +97,7 @@ class history {
     void display() {
         // Iterate through log
         if (count == 0) {
-            cout << "No command history found." << endl;
+            cout << "Shell history empty." << endl;
             return;
         }
         for (unsigned int i = 0; i < count; i++) {
@@ -217,7 +217,10 @@ int main(int argc, char *argv[]) {
         char * prevCmd = shellHistory.previous(); //get history if it exists
         if(prevCmd != NULL){
           cout << prevCmd << endl;//print previous command
+        }else{
+          continue;
         }
+        
         //run previous command
         strcpy(userInput, prevCmd);
         strcat(userInput, "\n");  //add newline for parse command function
