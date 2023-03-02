@@ -130,7 +130,7 @@ int parse_command(char command[], char *args[])
 }
 
 /**
- * @brief 
+ * @brief check if argument is I/O
  *
  * @param args command line arguments
  * @param num_args number of arguments
@@ -152,7 +152,7 @@ for(int i = 0; i <= num_args; i++){
 }
 
 /**
- * @brief check if argument is file in/out
+ * @brief check if argument is ampersand
  *
  * @param args command line arguments
  * @param num_args number of arguments
@@ -252,8 +252,8 @@ int main(int argc, char *argv[]) {
           //removal of IO char and output file since its already open
           args[num_args - 1] = NULL;
           args[num_args] = NULL;
-          //open file of the specified file descriptior, 1 : 0
-          dup2(fileDescriptor, ioType = 'o' ? STDOUT_FILENO : STDIN_FILENO);
+          //open file of the specified file descriptior
+          dup2(fileDescriptor, ioType = 'o');
         }
         //successful process should return 0, else -1
         int procStatus = execvp(args[0], args);
