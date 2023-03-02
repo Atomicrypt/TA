@@ -159,7 +159,7 @@ for(int i = 0; i <= num_args; i++) {
  * @return true/false
  */
 bool checkAmp(char *args[], int num_args) {
-  for(int i = 1; i <= num_args; i++) {
+  for(int i = 0; i <= num_args; i++) {
     if(strcmp(args[i], "&") == 0) {
       return true;
     }
