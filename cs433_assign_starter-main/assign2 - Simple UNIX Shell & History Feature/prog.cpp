@@ -137,7 +137,7 @@ int parse_command(char command[], char *args[])
  */
 bool checkAmp(char *args[], int num_args) {
   for(int i = 1; i <= num_args; i++) {
-    if(strcmp(args[i], "&") == 0) {
+    if(strcmp(args[i], "-l&") == 0) {
       return true;
     }
   }
@@ -193,7 +193,7 @@ int main(int argc, char *argv[]) {
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     bool should_run = true;           /* flag to determine when to exit program */
-    bool await_command = true; 
+    bool should_wait = true; 
 
     history shellHistory = history();
 
@@ -233,14 +233,30 @@ int main(int argc, char *argv[]) {
       // add user input to shellHistory
       shellHistory.add(args, num_args);
 
-      if (checkAmp(args, num_args)) {
-        // if ampersand exists, drop the last index
-        args[num_args] = NULL; // delete array and replace the ampersand
-        num_args--; // decrement number of arguments to uninclude ampersand if IO character exists
-        await_command = false; // flag to make shell not wait for child process to complete
+      //check for ampersand before forking process
+      if(checkAmp(args, num_args)){
+        //if '&' found, the set to null
+        args[num_args] = NULL;
+        //decrement number of arguments to account
+        num_args--;
+        //process should now not wait
+        should_wait = false;
+      }else{
+        //otherwise process still waits
+        should_wait = true;
       }
-      else {
-        await_command = true; // flag to make shell wait for child process to complete
+
+      //check for ampersand before forking process
+      if(checkAmp(args, num_args)){
+        //if '&' found, the set to null
+        args[num_args] = NULL;
+        //decrement number of arguments to account
+        num_args--;
+        //process should now not wait
+        should_wait = false;
+      }else{
+        //otherwise process still waits
+        should_wait = true;
       }
 
       pid_t pid = fork(); //create child process
@@ -280,7 +296,7 @@ int main(int argc, char *argv[]) {
       }
       else {
         // parent will invoke wait() function unless command argument included '&'
-        if (await_command) {  // if '&' wasn't found, wait for completion
+        if (should_wait) {  // if '&' wasn't found, wait for completion
           wait(NULL);
         }
         
