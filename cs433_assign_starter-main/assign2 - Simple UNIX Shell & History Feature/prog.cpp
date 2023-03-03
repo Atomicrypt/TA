@@ -283,15 +283,10 @@ int main(int argc, char *argv[]) {
         if (await_command) {  // if '&' wasn't found, wait for completion
           wait(NULL);
         }
+        
       }
       
-      //**
-      // * After reading user input, the steps are:
-      // * (1) fork a child process using fork() #########DONE#########
-      // * (2) the child process will invoke execvp() #########DONE#########
-      // * (3) parent will invoke wait() unless command included &  #########DONE#########
-      // *
-
     }
+
     return 0;
 }
