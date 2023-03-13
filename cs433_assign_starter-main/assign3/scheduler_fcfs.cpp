@@ -12,3 +12,15 @@
 
 // TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
 // member functions init, print_results, and simulate here
+
+SchedulerFCFS:: SchedulerFCFS()
+{
+    count = 0;
+};
+
+void SchedulerFCFS:: init(std::vector<PCB>& process_list)
+{
+
+};
+
+SchedulerFCFS:: ~SchedulerFCFS();
