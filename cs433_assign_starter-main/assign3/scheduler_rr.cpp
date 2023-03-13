@@ -13,3 +13,38 @@
 
 // TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
 // member functions init, print_results, and simulate here
+
+//constructor for RR Scheduler objects
+SchedulerRR(time_quantum)
+{
+
+};
+
+/**
+    * @brief This function is called once before the simulation starts.
+    *        It is used to initialize the scheduler.
+    * @param process_list The list of processes in the simulation.
+    */
+void init(std::vector<PCB>& process_list){
+    process_list = {};
+}
+
+/**
+ * @brief This function is called once after the simulation ends.
+ *        It is used to print out the results of the simulation.
+ */
+void SchedulerRR::print_results(){
+
+}
+
+/**
+ * @brief This function simulates the scheduling of processes in the ready queue.
+ *        It stops when all processes are finished.
+ */
+void simulate(){
+    
+}
+
+SchedulerRR::~SchedulerRR(){
+
+}
