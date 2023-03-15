@@ -16,9 +16,10 @@
 class SchedulerRR : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
-    string ProcName;
-    int priority;
-    int burstTime;
+    PCB *readyQueue;
+    int capcity;
+    int count;
+
 public:
     /**
      * @brief Construct a new SchedulerRR object

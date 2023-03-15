@@ -1,7 +1,7 @@
 /**
  * Assignment 1: priority queue of processes
  * @file pcb.h
- * @author ??? Alex Nelson
+ * @author Alex Nelson, Tyler Felicidario
  * @brief This is the header file for the PCB class, a process control block.
  * @version 0.1
  */
@@ -10,6 +10,7 @@
 
 #pragma once
 #include <iostream>
+#include <numeric>
 using namespace std;
 
 // enum class of process state
@@ -82,18 +83,8 @@ public:
      * @param state
      */
     void setState(ProcState state) {
-        // TODO: add your code here
-        if (PCB()){
-            state = ProcState::NEW;
-        } elif(--){
-            state = ProcState::READY;
-        } elif(--){
-            state = ProcState::RUNNING;
-        } elif(--){
-            state = ProcState::WAITING;
-        } else(--){
-            state = ProcState::TERMINATED;
-        }
+        // TODO: add your code hereDONE
+        this->state = state;//set local state to state passed in
     }
 
     /**
@@ -101,7 +92,8 @@ public:
      * @param priority
      */
     void setPriority(unsigned int priority) {
-        // TODO: add your code here
+        // TODO: add your code hereDONE
+        this->priority = priority; //set local priority to priority passed in
     }
 
     /**
