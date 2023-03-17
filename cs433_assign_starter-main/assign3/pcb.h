@@ -1,7 +1,7 @@
 /**
  * Assignment 1: priority queue of processes
  * @file pcb.h
- * @author ??? (TODO: your name)
+ * @author ??? Alex Nelson, Tyler Felicidario
  * @brief This is the header file for the PCB class, a process control block.
  * @version 0.1
  */
@@ -35,6 +35,13 @@ public:
     // The arrival time of the process
     unsigned int arrival_time;
 
+    // The relative wait time
+    unsigned int r_wait_time;
+    // The relative turnaround time
+    unsigned int r_turn_time;
+    // The relative time remaining of the current process
+    unsigned int time_remaining;
+
     /**
      * @brief Construct a new PCB object
      * @param id: each process has a unique ID
@@ -47,6 +54,10 @@ public:
         this->priority = priority;
         this->burst_time = burst_time;
         this->arrival_time = 0;
+
+        this->r_wait_time = 0;
+        this->r_turn_time = 0;
+        this->time_remaining = 0;
     }
 
     /**
