@@ -15,18 +15,21 @@
 // member functions init, print_results, and simulate here
 
 //constructor for RR Scheduler objects
-SchedulerRR(time_quantum)
-{
-
-};
+SchedulerRR::SchedulerRR(int time_quantum){
+    mTimeQuant = time_quantum;
+}
 
 /**
     * @brief This function is called once before the simulation starts.
     *        It is used to initialize the scheduler.
     * @param process_list The list of processes in the simulation.
     */
-void init(std::vector<PCB>& process_list){
-    process_list = {};
+void SchedulerRR::init(std::vector<PCB>& process_list){
+    
+    // vector<PCB> scheduler; 
+    for(int i = 0; i < process_list.size(); i++){
+        scheduler.push_back(process_list[i]);   //place it in process list
+    }
 }
 
 /**
@@ -34,15 +37,14 @@ void init(std::vector<PCB>& process_list){
  *        It is used to print out the results of the simulation.
  */
 void SchedulerRR::print_results(){
-
 }
 
 /**
  * @brief This function simulates the scheduling of processes in the ready queue.
  *        It stops when all processes are finished.
  */
-void simulate(){
-    
+void SchedulerRR::simulate(){
+
 }
 
 SchedulerRR::~SchedulerRR(){
