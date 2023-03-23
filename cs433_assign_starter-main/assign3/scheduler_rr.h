@@ -12,12 +12,19 @@
 #define ASSIGN3_SCHEDULER_RR_H
 
 #include "scheduler.h"
+#include <queue>
 
 class SchedulerRR : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
     int mTimeQuant;
-    vector<PCB> scheduler;
+    queue<PCB*> processes;
+    double avgWait;
+    double avgTurnaround;
+    unsigned processTotal;
+    std::vector<PCB> initProcList;
+    queue<PCB> rQueue;
+    // vector<PCB> scheduler;
 
 public:
     /**
