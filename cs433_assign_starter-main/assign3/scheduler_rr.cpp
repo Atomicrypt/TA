@@ -14,10 +14,10 @@
 #include <unordered_map>
 #include <algorithm>
 
-// TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
-// member functions init, print_results, and simulate here
 
-//constructor for RR Scheduler objects
+/**
+ * @brief Construct a new SchedulerRR object
+ */
 SchedulerRR::SchedulerRR(int time_quantum){
     mTimeQuant = time_quantum;
     avgTurnaround = 0.0;
@@ -26,10 +26,18 @@ SchedulerRR::SchedulerRR(int time_quantum){
 }
 
 /**
-    * @brief This function is called once before the simulation starts.
-    *        It is used to initialize the scheduler.
-    * @param process_list The list of processes in the simulation.
-    */
+ * @brief Destroy the SchedulerRR object
+ */
+SchedulerRR::~SchedulerRR(){
+
+}
+
+
+/**
+* @brief This function is called once before the simulation starts.
+*        It is used to initialize the scheduler.
+* @param process_list The list of processes in the simulation.
+*/
 void SchedulerRR::init(std::vector<PCB>& process_list){
     
     processTotal = process_list.size();
@@ -41,11 +49,8 @@ void SchedulerRR::init(std::vector<PCB>& process_list){
 cout << "TEST " << processTotal << " TEST" << endl;
     for (int i = 0; i < processTotal; i++)                   //###### DEBUG NEEDED *processTotal* ######
     {
-    processes.push(&process_list[i]);
-    
-    
-    // cout << "Running process " << process_list[i].name << " for " 
-    //             << process_list[i].burst_time << " time units." << endl;
+        processes.push(&process_list[i]);
+
         if(process_list[i].burst_time != 0)
         {
             cout << "Running Process ";
@@ -69,52 +74,15 @@ cout << "TEST " << processTotal << " TEST" << endl;
                 
             }
             cout << endl;
-        if(rQueue.size() != 0)
-        {
-        process_list.push_back(rQueue.front());
-        rQueue.pop();
-        
-        }
+            if(rQueue.size() != 0)
+            {
+            process_list.push_back(rQueue.front());
+            rQueue.pop();
+            
+            }
         }
     }
 }
-    
-    // vector<PCB> scheduler; 
-//     for(int i = 0; i < process_list.size(); i++){
-//         scheduler.push_back(process_list[i]);   //place processes in scheduler
-//     }
-
-//     for(int i =  0; i < scheduler.size(); i++)
-//    {
-//     PCB proc = scheduler[i];
-//     if(scheduler[i].burst_time != 0)
-//     {
-//         cout << "Running Process ";
-//         if(scheduler[i].burst_time >= mTimeQuant)
-//         {
-//             proc.r_turn_time += mTimeQuant;    //TT is equal to TQ
-//             cout << scheduler[i].name << " for " << mTimeQuant << " time units";
-//             scheduler[i].burst_time -= mTimeQuant;
-//             rQueue.push(scheduler[i]);  //push process to readyqueue to be run later
-            
-//         }
-//         //handle burst times < tq
-//         else if(scheduler[i].burst_time < mTimeQuant && scheduler[i].burst_time != 0)
-//         {
-//             cout << scheduler[i].name << " for " << scheduler[i].burst_time << " time units";
-//             proc.r_turn_time += scheduler[i].burst_time;   //TT is equal to BT
-//             scheduler[i].burst_time = 0;    //since BT < TQ, BT set to 0 since process is finished
-//         }
-//         cout << endl;
-
-//         if(rQueue.size() != 0)
-
-//         {
-//         scheduler.push_back(rQueue.front());
-//         rQueue.pop();
-//         }
-//     }
-//    }
 
 
 /**
@@ -125,6 +93,7 @@ void SchedulerRR::print_results(){
     cout << "Average turnaround time = " << avgTurnaround 
                 << ", Average wait time = " << avgWait << "\n";
 }
+
 
 /**
  * @brief This function simulates the scheduling of processes in the ready queue.
@@ -165,10 +134,4 @@ void SchedulerRR::simulate(){
                   << proc->r_turn_time
                   << ", waiting time = " << proc->r_wait_time << endl;
     }
-   
-
-}
-
-SchedulerRR::~SchedulerRR(){
-
 }
