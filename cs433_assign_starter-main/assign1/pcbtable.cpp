@@ -1,7 +1,7 @@
 /**
  * Assignment 1: priority queue of processes
  * @file pcbtable.h
- * @author ??? (TODO: your name)
+ * @author Alex Nelson, Tyler Felicidario
  * @brief This is the implementation file for the PCBTable class.
  * //You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
  * // Remember to add sufficient comments to your code
@@ -16,6 +16,10 @@
  */
 PCBTable::PCBTable(int size) {
    // TODO: add your code here
+   // table_size = size;
+   table = vector<PCB *>(size);
+   // iota(table.begin(), table.end(), nullptr);
+   count = 0;
 }
 
 /**
@@ -24,6 +28,7 @@ PCBTable::PCBTable(int size) {
  */
 PCBTable::~PCBTable() {
    // TODO: add your code here
+   table.clear();   //clear vector
 }
 
 /**
@@ -34,7 +39,7 @@ PCBTable::~PCBTable() {
  */
 PCB* PCBTable::getPCB(unsigned int idx) {
     // TODO: add your code here
-    return NULL;
+    return table[idx];
 }
 
 /**
@@ -44,4 +49,20 @@ PCB* PCBTable::getPCB(unsigned int idx) {
  */
 void PCBTable::addPCB(PCB *pcb, unsigned int idx) {
     // TODO: add your code here
+    if(count == 0){
+      // table.addNewPCB(pcb->id,pcb->priority,)
+    table.insert(table.begin(),pcb);
+    }else
+    table.insert(table.begin()+idx,pcb);  //insert at index
+  
 }
+
+
+// void PCBTable::addPCB(PCB *pcb, unsigned int idx) {
+//     // TODO: add your code here
+//     if(count == 0){
+//       table.addNewPCB(pcb->id,pcb->priority,)
+//     }else
+//     table.insert(table.begin()+idx,pcb);  //insert at index
+  
+// }
