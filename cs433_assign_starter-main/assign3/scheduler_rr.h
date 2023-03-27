@@ -20,7 +20,8 @@ private:
     queue<PCB*> processes;
     double avgWait;
     double avgTurnaround;
-    unsigned processTotal;
+    //unsigned processTotal;
+    int processTotal;
     std::vector<PCB> initProcList;
     queue<PCB> rQueue;
     // vector<PCB> scheduler;
