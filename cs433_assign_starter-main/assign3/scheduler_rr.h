@@ -16,12 +16,11 @@
 
 class SchedulerRR : public Scheduler {
 private:
-    // TODO: add necessary member variables here for your implementation
-    int mTimeQuant;
+    unsigned int mTimeQuant;
     queue<PCB*> processes;
     double avgWait;
     double avgTurnaround;
-    unsigned processTotal;
+    unsigned int processTotal;
     std::vector<PCB> initProcList;
     queue<PCB> rQueue;
     // vector<PCB> scheduler;
