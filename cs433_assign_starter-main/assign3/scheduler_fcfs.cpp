@@ -84,6 +84,6 @@ void SchedulerFCFS::simulate() {
  *        It is used to print out the results of the simulation.
  */
 void SchedulerFCFS::print_results() {
-    std::cout << "Average turnaround time = " << avgTurnaround 
-              << ", Average wait time = " << avgWait << "\n";
+    std::cout << "Average turn-around time = " << avgTurnaround 
+              << ", Average waiting = " << avgWait << "\n";
 }

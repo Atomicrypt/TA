@@ -90,8 +90,8 @@ cout << "TEST " << processTotal << " TEST" << endl;
  *        It is used to print out the results of the simulation.
  */
 void SchedulerRR::print_results(){
-    cout << "Average turnaround time = " << avgTurnaround 
-                << ", Average wait time = " << avgWait << "\n";
+    cout << "Average turn-around time = " << avgTurnaround 
+         << ", Average waiting = " << avgWait << "\n";
 }
 
 

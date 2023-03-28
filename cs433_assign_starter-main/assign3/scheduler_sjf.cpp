@@ -69,6 +69,6 @@ void SchedulerSJF::simulate() {
 }
 
 void SchedulerSJF::print_results() {
-    std::cout << "Average turnaround time = " << avgTurnaround 
+    std::cout << "Average turn-around time = " << avgTurnaround 
               << ", Average wait time = " << avgWait << "\n";
 }
