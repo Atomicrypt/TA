@@ -16,6 +16,7 @@
 
 class SchedulerRR : public Scheduler {
 private:
+
     int mTimeQuant;
     queue<PCB*> processes;
     double avgWait;
@@ -24,7 +25,6 @@ private:
     int processTotal;
     std::vector<PCB> initProcList;
     queue<PCB> rQueue;
-    // vector<PCB> scheduler;
 
 public:
     /**

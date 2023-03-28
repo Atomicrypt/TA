@@ -13,11 +13,16 @@
 #define ASSIGN3_SCHEDULER_PRIORITY_H
 
 #include "scheduler.h"
+#include <queue>
 
 class SchedulerPriority : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
-
+    queue<PCB*> processes;
+    double avgWait;
+    double avgTurnaround;
+    int processTotal;
+    std::vector<PCB> initProcList;
 public:
     /**
      * @brief Construct a new SchedulerPriority object
