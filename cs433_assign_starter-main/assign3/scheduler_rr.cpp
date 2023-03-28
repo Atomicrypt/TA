@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_rr.h
- * @author ??? Alex Nelson, Tyler Felicidario
+ * @author Alex Nelson, Tyler Felicidario
  * @brief This Scheduler class implements the RoundRobin (RR) scheduling algorithm.
  * @version 0.1
  */
@@ -87,8 +87,8 @@ void SchedulerRR::init(std::vector<PCB>& process_list){
  *        It is used to print out the results of the simulation.
  */
 void SchedulerRR::print_results(){
-    cout << "Average turnaround time = " << avgTurnaround 
-                << ", Average wait time = " << avgWait << "\n";
+    cout << "Average turn-around time = " << avgTurnaround 
+         << ", Average waiting = " << avgWait << "\n";
 }
 
 

@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_rr.h
- * @author ??? Alex Nelson, Tyler Felicidario
+ * @author Alex Nelson, Tyler Felicidario
  * @brief This Scheduler class implements the RoundRobin (RR) scheduling algorithm.
  * @version 0.1
  */
@@ -16,14 +16,15 @@
 
 class SchedulerRR : public Scheduler {
 private:
-    unsigned int mTimeQuant;
+
+    int mTimeQuant;
     queue<PCB*> processes;
     double avgWait;
     double avgTurnaround;
-    unsigned int processTotal;
+    //unsigned processTotal;
+    int processTotal;
     std::vector<PCB> initProcList;
     queue<PCB> rQueue;
-    // vector<PCB> scheduler;
 
 public:
     /**

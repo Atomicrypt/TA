@@ -1,7 +1,7 @@
 CS 433 Programming assignment 3
-Author: xxxxxx and xxxxxxx
-Date: xx/xx/20xx
-Course: CS433 (Operating Systems)
+Author: Alex Nelson and Tyler Felicidario
+Date: 03/31/2023
+Course: CS 433 - Operating Systems
 Description : test FCFS scheduling algorithm 
 =================================
 Running ./fcfs schedule.txt
