@@ -45,40 +45,8 @@ void SchedulerRR::init(std::vector<PCB>& process_list){
 
     for (int i=0 ; i<processTotal; i++)//for each pcb object in proccess_list                   //###### DEBUG NEEDED *processTotal* ######
     {
-        processes.push(&process_list[i]);    //push the object into processes (running processes)
-
-        if(process_list[i].burst_time != 0)  //as long as pcb has a burst time
-        {
-            cout << "Running Process ";
-            if(process_list[i].burst_time > mTimeQuant) //if the burst time is > or = the time quantum
-            {   
-                //case TT is equal to TQ
-                cout << process_list[i].name << " for " << mTimeQuant << " time units";
-                process_list[i].burst_time -= mTimeQuant;    //adjust the burst time for when the pcb object has to run later
-                rQueue.push(process_list[i]);  //push process to readyqueue to be run later
-                
-            }
-            //handle burst times < tq
-            else   //otherwise the burst time is less than or equal to the time quantum
-            {   
-                
-                cout << process_list[i].name << " for " << process_list[i].burst_time << " time units";
-                process_list[i].burst_time -= process_list[i].burst_time;    //since BT < TQ, BT set to 0 since process is finished
-                
-            }
-
-            cout << endl; 
-        }
-
-        if(!rQueue.empty())  //if the ready queue of processes with greater BT than the TQ is not empty
-        {
-            process_list.push_back(rQueue.front()); //place the process back into the end of the process list 
-            processes.push(&rQueue.front());
-            rQueue.pop();   //pop the process from the ready queue since it is now done being evaluated
-            processTotal++;
-        }
-        
-    }
+        processes.push(&process_list[i]); 
+    }     
 }
 
 
@@ -105,25 +73,44 @@ void SchedulerRR::simulate(){
     3)continue until all processes are gone through then 
     finish the processes from rqueue
     */
-    double trailing = 0;    // Total elapsed process time
+
+    double trailing = 0;    // overall burst time of each process
     double trailingSum = 0;
-    processTotal = processes.size();
+    rQueue = processes;
 
     unordered_map<string, PCB*> umap;  // PCBname, PCBpointer
 
-        // Print array from T1
-        cout << "process total: " << processTotal;
-    for (int i = 0; i < processTotal; i++) {                    //###### DEBUG NEEDED *processTotal* ######
-        PCB* proc = processes.front();  // First element of the queue
-        proc->r_wait_time = trailing;   // Set relative wait time
-        trailing += proc->burst_time;   // Add burst time to trailing
-        proc->r_turn_time = trailing;   // Set relative turnaround time
-        umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
-        trailingSum += trailing;        // Cumulative sum of trailing
-        processes.pop();                // Move to next process
-    }
    
-    avgWait = ((trailingSum - trailing) / processTotal);    // Calculate Average Wait Time
+     // Print array from T1
+     while(!rQueue.empty())
+    for (unsigned i = 0; i < processTotal; i++) {   
+            PCB* proc = processes.front();  // First element of the queue
+            // proc->time_remaining = proc->burst_time;
+            proc->r_wait_time = trailing;   // Set relative wait time
+            //if burst time > time quant, then push process to rq
+            if(proc->burst_time > mTimeQuant)
+            {
+                trailing += mTimeQuant; 
+                proc->burst_time -= mTimeQuant;
+            }else
+            {
+                trailing += proc->time_remaining;
+                proc->r_wait_time -= mTimeQuant - proc->burst_time;
+                proc->burst_time = 0;
+            }
+            proc->r_turn_time = trailing;   // Set relative turnaround time   
+            umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
+            trailingSum += trailing;
+                        // Move to next process
+        if (!rQueue.empty())
+        {                     //###### DEBUG NEEDED ######
+            processes.back() = rQueue.front();
+            rQueue.pop(); 
+        }
+        processes.pop();
+   }
+   
+    avgWait = (trailingSum - trailing) / processTotal;    // Calculate Average Wait Time
     avgTurnaround = trailingSum / processTotal;             // Calculate Average Turnaround Time
 
     for (int i = 0; i < processTotal; i++) {    // Prints T1 to T8

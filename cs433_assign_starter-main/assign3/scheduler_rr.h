@@ -24,7 +24,7 @@ private:
     //unsigned processTotal;
     int processTotal;
     std::vector<PCB> initProcList;
-    queue<PCB> rQueue;
+    queue<PCB*> rQueue;
 
 public:
     /**
