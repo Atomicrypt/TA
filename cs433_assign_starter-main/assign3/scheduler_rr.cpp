@@ -45,7 +45,7 @@ void SchedulerRR::init(std::vector<PCB>& process_list){
 
     for (int i=0 ; i<processTotal; i++)//for each pcb object in proccess_list                   //###### DEBUG NEEDED *processTotal* ######
     {
-        readyQueue.push(&process_list[i]); 
+        readyQueue.push(&process_list[i]);         
     }     
     
 }
@@ -87,26 +87,38 @@ void SchedulerRR::simulate(){
     {
         proc = readyQueue.front();
         runningQueue.push(proc);
-        proc->time_remaining = proc->burst_time;
         
-        proc->r_turn_time += trailing;
-
-        if(proc->time_remaining > mTimeQuant)
+        //update remaining time and wait time of process after running
+        proc->time_remaining = proc->burst_time;
+        proc->r_wait_time = trailing - proc->burst_time;
+        
+        if(proc->burst_time > mTimeQuant)   //for process w/ burst time greater than time quantum
         {
-            trailing += mTimeQuant;
-            proc->time_remaining -= mTimeQuant;
-            proc->burst_time -= mTimeQuant;
+            cout << "Running process " << proc->name << " for " 
+                  << mTimeQuant << " time units." << endl;
+
+            //updated elapsed time, remaining burst time, and the burst time then push processes back to ready queue
+            trailing += mTimeQuant; 
+            proc->time_remaining -= mTimeQuant; 
+            proc->burst_time -= mTimeQuant; 
             readyQueue.push(proc);
-        } else
-        {
-            trailing = trailing + proc->time_remaining;
-            proc->r_wait_time = trailing - proc->burst_time;
-            proc->burst_time = 0;
-        }
 
+        } else  //remaining burst time is less than time quantum
+        { 
+            cout << "Running process " << proc->name << " for " 
+                  << proc->burst_time << " time units." << endl;
+
+            //update elapsed time, turnaround, remaining burst time, burst time, and total time
+            trailing = trailing + proc->time_remaining; 
+            proc->r_turn_time += trailing;  
+            proc->burst_time = 0;   //since process finishes in this time, its burst time can just be 0 
+            trailingSum += trailing; 
+        }
+        
+        //unconditionally add process to map and pop process from readyqueue 
         umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
-        trailingSum += trailing;
         readyQueue.pop();
+
     }
         
 
