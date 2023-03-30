@@ -18,13 +18,13 @@ class SchedulerRR : public Scheduler {
 private:
 
     int mTimeQuant;
-    queue<PCB*> processes;
+    queue<PCB*> runningQueue;
     double avgWait;
     double avgTurnaround;
     //unsigned processTotal;
     int processTotal;
     std::vector<PCB> initProcList;
-    queue<PCB*> rQueue;
+    queue<PCB*> readyQueue;
 
 public:
     /**

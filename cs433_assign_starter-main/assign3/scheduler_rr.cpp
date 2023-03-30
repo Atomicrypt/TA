@@ -45,8 +45,9 @@ void SchedulerRR::init(std::vector<PCB>& process_list){
 
     for (int i=0 ; i<processTotal; i++)//for each pcb object in proccess_list                   //###### DEBUG NEEDED *processTotal* ######
     {
-        processes.push(&process_list[i]); 
+        readyQueue.emplace(&process_list[i]); 
     }     
+    
 }
 
 
@@ -76,40 +77,39 @@ void SchedulerRR::simulate(){
 
     double trailing = 0;    // overall burst time of each process
     double trailingSum = 0;
-    rQueue = processes;
+    processTotal = readyQueue.size();
+
 
     unordered_map<string, PCB*> umap;  // PCBname, PCBpointer
+    PCB* proc;
 
-   
-     // Print array from T1
-     while(!rQueue.empty())
-    for (unsigned i = 0; i < processTotal; i++) {   
-            PCB* proc = processes.front();  // First element of the queue
-            // proc->time_remaining = proc->burst_time;
-            proc->r_wait_time = trailing;   // Set relative wait time
-            //if burst time > time quant, then push process to rq
-            if(proc->burst_time > mTimeQuant)
-            {
-                trailing += mTimeQuant; 
-                proc->burst_time -= mTimeQuant;
-            }else
-            {
-                trailing += proc->time_remaining;
-                proc->r_wait_time -= mTimeQuant - proc->burst_time;
-                proc->burst_time = 0;
-            }
-            proc->r_turn_time = trailing;   // Set relative turnaround time   
-            umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
-            trailingSum += trailing;
-                        // Move to next process
-        if (!rQueue.empty())
-        {                     //###### DEBUG NEEDED ######
-            processes.back() = rQueue.front();
-            rQueue.pop(); 
+    while(!readyQueue.empty())
+    {
+        proc = readyQueue.front();
+        runningQueue.push(proc);
+        proc->time_remaining = proc->burst_time;
+        
+        proc->r_turn_time += trailing;
+
+        if(proc->time_remaining > mTimeQuant)
+        {
+            trailing += mTimeQuant;
+            proc->time_remaining -= mTimeQuant;
+            proc->burst_time -= mTimeQuant;
+            readyQueue.push(proc);
+        } else
+        {
+            trailing = trailing + proc->time_remaining;
+            proc->r_wait_time = trailing - proc->burst_time;
+            proc->burst_time = 0;
         }
-        processes.pop();
-   }
-   
+
+        umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
+        trailingSum += trailing;
+        readyQueue.pop();
+    }
+        
+
     avgWait = (trailingSum - trailing) / processTotal;    // Calculate Average Wait Time
     avgTurnaround = trailingSum / processTotal;             // Calculate Average Turnaround Time
 
