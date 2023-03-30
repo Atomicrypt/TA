@@ -5,8 +5,8 @@
  * @brief This Scheduler class implements the RoundRobin (RR) scheduling algorithm.
  * @version 0.1
  */
-
-
+//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
+// Remember to add sufficient and clear comments to your code
 
 #ifndef ASSIGN3_SCHEDULER_RR_H
 #define ASSIGN3_SCHEDULER_RR_H
@@ -18,13 +18,13 @@ class SchedulerRR : public Scheduler {
 private:
 
     int mTimeQuant;
-    queue<PCB*> processes;
+    queue<PCB*> runningQueue;
     double avgWait;
     double avgTurnaround;
     //unsigned processTotal;
     int processTotal;
     std::vector<PCB> initProcList;
-    queue<PCB> rQueue;
+    queue<PCB*> readyQueue;
 
 public:
     /**

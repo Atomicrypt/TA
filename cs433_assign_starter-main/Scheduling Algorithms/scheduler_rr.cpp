@@ -5,8 +5,9 @@
  * @brief This Scheduler class implements the RoundRobin (RR) scheduling algorithm.
  * @version 0.1
  */
-
-
+//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
+// Remember to add sufficient and clear comments to your code
+//
 
 #include "scheduler_rr.h"
 #include <string>
@@ -44,40 +45,9 @@ void SchedulerRR::init(std::vector<PCB>& process_list){
 
     for (int i=0 ; i<processTotal; i++)//for each pcb object in proccess_list                   //###### DEBUG NEEDED *processTotal* ######
     {
-        processes.push(&process_list[i]);    //push the object into processes (running processes)
-
-        if(process_list[i].burst_time != 0)  //as long as pcb has a burst time
-        {
-            cout << "Running Process ";
-            if(process_list[i].burst_time > mTimeQuant) //if the burst time is > or = the time quantum
-            {   
-                //case TT is equal to TQ
-                cout << process_list[i].name << " for " << mTimeQuant << " time units";
-                process_list[i].burst_time -= mTimeQuant;    //adjust the burst time for when the pcb object has to run later
-                rQueue.push(process_list[i]);  //push process to readyqueue to be run later
-                
-            }
-            //handle burst times < tq
-            else   //otherwise the burst time is less than or equal to the time quantum
-            {   
-                
-                cout << process_list[i].name << " for " << process_list[i].burst_time << " time units";
-                process_list[i].burst_time -= process_list[i].burst_time;    //since BT < TQ, BT set to 0 since process is finished
-                
-            }
-
-            cout << endl; 
-        }
-
-        if(!rQueue.empty())  //if the ready queue of processes with greater BT than the TQ is not empty
-        {
-            process_list.push_back(rQueue.front()); //place the process back into the end of the process list 
-            processes.push(&rQueue.front());
-            rQueue.pop();   //pop the process from the ready queue since it is now done being evaluated
-            processTotal++;
-        }
-        
-    }
+        readyQueue.push(&process_list[i]);         
+    }     
+    
 }
 
 
@@ -104,26 +74,58 @@ void SchedulerRR::simulate(){
     3)continue until all processes are gone through then 
     finish the processes from rqueue
     */
-    double trailing = 0;    // Total elapsed process time
-    double trailingSum = 0;
-    processTotal = processes.size();
+
+    double currentTime = 0;    // overall burst time of each process
+    double totalTime = 0;
+    processTotal = readyQueue.size();
+
 
     unordered_map<string, PCB*> umap;  // PCBname, PCBpointer
+    PCB* proc;
 
-        // Print array from T1
-        cout << "process total: " << processTotal;
-    for (int i = 0; i < processTotal; i++) {                    //###### DEBUG NEEDED *processTotal* ######
-        PCB* proc = processes.front();  // First element of the queue
-        proc->r_wait_time = trailing;   // Set relative wait time
-        trailing += proc->burst_time;   // Add burst time to trailing
-        proc->r_turn_time = trailing;   // Set relative turnaround time
+    while(!readyQueue.empty())
+    {
+        proc = readyQueue.front();  //initialize process ptr for each process
+        runningQueue.push(proc);
+        
+        //update remaining time and wait time of process after running
+        proc->time_remaining = proc->burst_time;
+        cout << "Current Time " << currentTime << endl;
+        cout << "Current Time Sum " << totalTime << endl; 
+        if(proc->time_remaining > mTimeQuant)   //for process w/ burst time greater than time quantum
+        {
+            cout << "Running process " << proc->name << " for " 
+                  << mTimeQuant << " time units." << endl;
+
+            //updated elapsed time, remaining burst time, and the burst time then push processes back to ready queue
+            currentTime += mTimeQuant; 
+            proc->time_remaining -= mTimeQuant; 
+            proc->burst_time -= mTimeQuant; 
+            readyQueue.push(proc);
+
+        } else  //remaining burst time is less than time quantum
+        { 
+            cout << "Running process " << proc->name << " for " 
+                  << proc->burst_time << " time units." << endl;
+
+            //update elapsed time, turnaround, remaining burst time, burst time, and total time
+            currentTime += proc->time_remaining; 
+            proc->r_turn_time += currentTime;  
+            proc->time_remaining = 0;   //since process finishes in this time, its burst time can just be 0 
+            proc->burst_time = 0;
+            totalTime += currentTime; 
+
+        }
+        
+        proc->r_wait_time = proc->r_turn_time - proc->burst_time;
+        //unconditionally add process to map and pop process from readyqueue 
         umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
-        trailingSum += trailing;        // Cumulative sum of trailing
-        processes.pop();                // Move to next process
+        readyQueue.pop();
     }
-   
-    avgWait = ((trailingSum - trailing) / processTotal);    // Calculate Average Wait Time
-    avgTurnaround = trailingSum / processTotal;             // Calculate Average Turnaround Time
+        
+
+    avgWait =  (totalTime - currentTime) / processTotal;    // Calculate Average Wait Time
+    avgTurnaround = totalTime / processTotal;             // Calculate Average Turnaround Time
 
     for (int i = 0; i < processTotal; i++) {    // Prints T1 to T8
         PCB* proc = umap[initProcList[i].name]; // Return PCB object
