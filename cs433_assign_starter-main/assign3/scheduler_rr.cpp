@@ -45,7 +45,7 @@ void SchedulerRR::init(std::vector<PCB>& process_list){
 
     for (int i=0 ; i<processTotal; i++)//for each pcb object in proccess_list                   //###### DEBUG NEEDED *processTotal* ######
     {
-        readyQueue.emplace(&process_list[i]); 
+        readyQueue.push(&process_list[i]); 
     }     
     
 }
