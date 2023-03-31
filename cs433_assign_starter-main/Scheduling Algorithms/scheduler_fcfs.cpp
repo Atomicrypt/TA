@@ -52,24 +52,24 @@ void SchedulerFCFS::init(std::vector<PCB>& process_list) {
  *        It stops when all processes are finished.
  */
 void SchedulerFCFS::simulate() {
-    double trailing = 0;    // Total elapsed process time
-    double trailingSum = 0;
+    double currentTime = 0;    // Total elapsed process time
+    double totalTime = 0;
 
     std::unordered_map<string, PCB*> umap;  // PCBname, PCBpointer
 
     // Print array from T1
     for (int i = 0; i < processTotal; i++) {
         PCB* proc = processes.front();  // First element of the queue
-        proc->r_wait_time = trailing;   // Set relative wait time
-        trailing += proc->burst_time;   // Add burst time to trailing
-        proc->r_turn_time = trailing;   // Set relative turnaround time
+        proc->r_wait_time = currentTime;   // Set relative wait time
+        currentTime += proc->burst_time;   // Add burst time to currentTime
+        proc->r_turn_time = currentTime;   // Set relative turnaround time
         umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
-        trailingSum += trailing;        // Cumulative sum of trailing
+        totalTime += currentTime;        // Cumulative sum of currentTime
         processes.pop();                // Move to next process
     }
 
-    avgWait = ((trailingSum - trailing) / processTotal);    // Calculate Average Wait Time
-    avgTurnaround = trailingSum / processTotal;             // Calculate Average Turnaround Time
+    avgWait = ((totalTime - currentTime) / processTotal);    // Calculate Average Wait Time
+    avgTurnaround = totalTime / processTotal;             // Calculate Average Turnaround Time
 
     for (int i = 0; i < processTotal; i++) {    // Prints T1 to T8
         PCB* proc = umap[initProcList[i].name]; // Return PCB object

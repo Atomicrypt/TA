@@ -75,57 +75,46 @@ void SchedulerRR::simulate(){
     finish the processes from rqueue
     */
 
-    double currentTime = 0;    // overall burst time of each process
-    double totalTime = 0;
+    double currentRunTime = 0;     //current run time
+    double totalRunTime = 0;       //total run time
     processTotal = readyQueue.size();
 
 
     unordered_map<string, PCB*> umap;  // PCBname, PCBpointer
     PCB* proc;
+    PCB* temp;
 
-    while(!readyQueue.empty())
-    {
-        proc = readyQueue.front();  //initialize process ptr for each process
-        runningQueue.push(proc);
-        
-        //update remaining time and wait time of process after running
+
+while (!readyQueue.empty()) {
+    proc = readyQueue.front(); //initialize process ptr for each process
+    //update remaining time and wait time of process after running
+    if (proc->time_remaining == 0) {    //if TR is 0 update it with the burst time for condition check
         proc->time_remaining = proc->burst_time;
-        cout << "Current Time " << currentTime << endl;
-        cout << "Current Time Sum " << totalTime << endl; 
-        if(proc->time_remaining > mTimeQuant)   //for process w/ burst time greater than time quantum
-        {
-            cout << "Running process " << proc->name << " for " 
-                  << mTimeQuant << " time units." << endl;
-
-            //updated elapsed time, remaining burst time, and the burst time then push processes back to ready queue
-            currentTime += mTimeQuant; 
-            proc->time_remaining -= mTimeQuant; 
-            proc->burst_time -= mTimeQuant; 
-            readyQueue.push(proc);
-
-        } else  //remaining burst time is less than time quantum
-        { 
-            cout << "Running process " << proc->name << " for " 
-                  << proc->burst_time << " time units." << endl;
-
-            //update elapsed time, turnaround, remaining burst time, burst time, and total time
-            currentTime += proc->time_remaining; 
-            proc->r_turn_time += currentTime;  
-            proc->time_remaining = 0;   //since process finishes in this time, its burst time can just be 0 
-            proc->burst_time = 0;
-            totalTime += currentTime; 
-
-        }
-        
-        proc->r_wait_time = proc->r_turn_time - proc->burst_time;
-        //unconditionally add process to map and pop process from readyqueue 
-        umap[proc->name] = proc;        // Access PCB by name, set pointer to PCB
-        readyQueue.pop();
     }
+    if (proc->time_remaining > mTimeQuant) { //for process w/ burst time greater than time quantum
+        //updated elapsed time, remaining burst time, and the burst time then push processes back to ready queue
+        currentRunTime += mTimeQuant;
+        proc->time_remaining -= mTimeQuant;
+        readyQueue.push(proc);
+        cout << "Running process " << proc->name << " for "
+             << mTimeQuant << " time units." << endl;
+    } else if (proc->time_remaining <= mTimeQuant) { //remaining burst time is less than time quantum
+        //update elapsed time, turnaround, remaining burst time, burst time, and total time
+        currentRunTime += proc->time_remaining;
+        proc->r_turn_time = currentRunTime;
+        proc->r_wait_time = proc->r_turn_time - proc->burst_time;
+        totalRunTime += currentRunTime;
+        cout << "Running process " << proc->name << " for "
+             << proc->time_remaining << " time units." << endl;
+        proc->time_remaining = 0; //since process finishes in this time, its burst time can just be 0
+    }
+    umap[proc->name] = proc; // Access PCB by name, set pointer to PCB
+    readyQueue.pop(); //remove current process to check next one
+}
         
 
-    avgWait =  (totalTime - currentTime) / processTotal;    // Calculate Average Wait Time
-    avgTurnaround = totalTime / processTotal;             // Calculate Average Turnaround Time
+    avgWait =  (totalRunTime - currentRunTime) / processTotal;    // Calculate Average Wait Time
+    avgTurnaround = totalRunTime / processTotal;             // Calculate Average Turnaround Time
 
     for (int i = 0; i < processTotal; i++) {    // Prints T1 to T8
         PCB* proc = umap[initProcList[i].name]; // Return PCB object

@@ -8,7 +8,7 @@
         "name": "(gdb) Attach",
         "type": "cppdbg",
         "request": "attach",
-        "program": "{workspaceFolder}/a.out",
+        "program": "{workspaceFolder}/rr",
         "MIMode": "gdb",
         "setupCommands": [
             {
@@ -27,9 +27,9 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/cs433_assign_starter-main/assign3/a.out",
-            "args": ["schedule.txt", "6"],
-            "cwd": "${workspaceFolder}/cs433_assign_starter-main/assign3"
+            "program": "${workspaceFolder}/cs433_assign_starter-main/Scheduling Algorithms/rr",
+            "args": ["schedule.txt", "2"],
+            "cwd": "${workspaceFolder}/cs433_assign_starter-main/Scheduling Algorithms"
         }
     ]
 }
