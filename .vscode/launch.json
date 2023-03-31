@@ -27,9 +27,11 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/cs433_assign_starter-main/Scheduling Algorithms/rr",
-            "args": ["schedule.txt", "2"],
-            "cwd": "${workspaceFolder}/cs433_assign_starter-main/Scheduling Algorithms"
+
+            "program": "${workspaceFolder}/cs433_assign_starter-main/assign3/rr",
+            "args": ["schedule.txt","6"],
+            "cwd": "${workspaceFolder}/cs433_assign_starter-main/assign3"
+
         }
     ]
 }
