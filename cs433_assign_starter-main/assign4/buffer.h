@@ -9,6 +9,8 @@
 #ifndef ASSIGN4_BUFFER_H
 #define ASSIGN4_BUFFER_H
 
+#include <list>
+
 // Define the data type of the buffer items
 typedef int buffer_item;
 
