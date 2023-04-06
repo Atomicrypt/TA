@@ -21,9 +21,22 @@ Buffer::~Buffer() {
     
 }
 
-bool Buffer::insert_item(buffer_item item) {}
+bool Buffer::insert_item(buffer_item item) {
+    if (!is_full()) {
+        items.push(item);
+        count++;
+        return true;
+    }
+}
 
-bool Buffer::remove_item(buffer_item *item) {}
+bool Buffer::remove_item(buffer_item *item) {
+    if (!is_empty()) {
+        *item = items.front();
+        items.pop();
+        count--;
+        return true;
+    }
+}
 
 int Buffer::get_size() {
     return maxSize;
@@ -47,4 +60,9 @@ bool Buffer::is_full() {
         return false;
 }
 
-void Buffer::print_buffer() {}
+void Buffer::print_buffer() {
+    //for (std::list<buffer_item>::iterator it = items.begin(); it != items.end(); ++it) {
+    //    std::cout *it;
+    //} 
+}
+    
