@@ -16,7 +16,7 @@
 
 // TODO: Add your implementation of the buffer class here
 Buffer::Buffer(int size) {
-    size = 5;
+    maxSize = size;
     count = 0;
 }
 
@@ -42,7 +42,7 @@ bool Buffer::remove_item(buffer_item *item) {
 }
 
 int Buffer::get_size() {
-    return size;
+    return maxSize;
 }
 
 int Buffer::get_count() {

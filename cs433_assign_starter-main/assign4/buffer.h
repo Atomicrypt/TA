@@ -9,6 +9,7 @@
 #ifndef ASSIGN4_BUFFER_H
 #define ASSIGN4_BUFFER_H
 
+#include <queue>
 
 // Define the data type of the buffer items
 typedef int buffer_item;
@@ -19,9 +20,9 @@ typedef int buffer_item;
 class Buffer {
 private:
     unsigned int count;
-    unsigned int size;
-    buffer_item buffer[5];
-
+    unsigned int maxSize;
+    std::queue<buffer_item> items;
+    
 public:
     /**
      * @brief Construct a new Buffer object
