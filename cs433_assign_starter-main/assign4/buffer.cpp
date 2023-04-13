@@ -13,8 +13,8 @@
 
 // TODO: Add your implementation of the buffer class here
 Buffer::Buffer(int size) {
+    size = 5;
     count = 0;
-    maxSize = size;
 }
 
 Buffer::~Buffer() {
@@ -39,7 +39,7 @@ bool Buffer::remove_item(buffer_item *item) {
 }
 
 int Buffer::get_size() {
-    return maxSize;
+    return size;
 }
 
 int Buffer::get_count() {
@@ -54,7 +54,7 @@ bool Buffer::is_empty() {
 }
 
 bool Buffer::is_full() {
-    if (count == maxSize)
+    if (count == size)
         return true;
     else
         return false;
@@ -65,4 +65,3 @@ void Buffer::print_buffer() {
     //    std::cout *it;
     //} 
 }
-    
