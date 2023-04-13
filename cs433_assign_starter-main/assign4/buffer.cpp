@@ -54,7 +54,7 @@ bool Buffer::is_empty() {
 }
 
 bool Buffer::is_full() {
-    if (count == maxSize)
+    if (count >= maxSize)
         return true;
     else
         return false;
