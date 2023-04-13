@@ -68,5 +68,6 @@
         "mutex": "cpp",
         "variant": "cpp",
         "__split_buffer": "cpp"
-    }
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

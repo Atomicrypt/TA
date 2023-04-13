@@ -10,6 +10,7 @@
 #include <iostream>
 #include "buffer.h"
 #include <unistd.h>
+#include <semaphore.h>
 
 using namespace std;
 

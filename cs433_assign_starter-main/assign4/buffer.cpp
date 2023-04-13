@@ -6,6 +6,9 @@
  * @version 0.1
  */
 
+
+//TREAT BUFFER AS A QUEUE
+
 //You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
 // Remember to add sufficient and clear comments to your code
 #include <iostream>
