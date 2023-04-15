@@ -16,8 +16,8 @@
 
 // TODO: Add your implementation of the buffer class here
 Buffer::Buffer(int size) {
-    maxSize = size;
     count = 0;
+    maxSize = size;
 }
 
 Buffer::~Buffer() {
@@ -30,6 +30,7 @@ bool Buffer::insert_item(buffer_item item) {
         count++;
         return true;
     }
+    return false;
 }
 
 bool Buffer::remove_item(buffer_item *item) {
@@ -39,6 +40,7 @@ bool Buffer::remove_item(buffer_item *item) {
         count--;
         return true;
     }
+    return false;
 }
 
 int Buffer::get_size() {
@@ -64,7 +66,17 @@ bool Buffer::is_full() {
 }
 
 void Buffer::print_buffer() {
-    //for (std::list<buffer_item>::iterator it = items.begin(); it != items.end(); ++it) {
-    //    std::cout *it;
-    //} 
+    std::cout << "Buffer: [";
+
+    /*if (!is_empty()) {
+        // Iterate through the list and display
+        for (std::queue<buffer_item>::iterator it = items.front(); it != items.back(); ++it) {
+            std::cout << *it;
+            if (it != --items.back()) {
+                std::cout << ", ";
+            }
+        }
+    }*/
+
+    std::cout << "]" << std::endl;
 }

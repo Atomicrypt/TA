@@ -32,6 +32,7 @@ void *producer(void *param) {
         /* sleep for a random period of time */
         usleep(rand()%1000000);
         
+        // Synchronization:
         sem_wait(&_empty);              // Semaphore wait
         pthread_mutex_lock(&_mutex);    // Mutex lock
 
@@ -55,6 +56,7 @@ void *consumer(void *param) {
         /* sleep for a random period of time */
         usleep(rand() % 1000000);
         
+        // Synchronization:
         sem_wait(&_full);               // Semaphore wait
         pthread_mutex_lock(&_mutex);    // Mutex lock
         
@@ -77,13 +79,35 @@ int main(int argc, char *argv[]) {
         cout << "Expected 3 arguments, received " << argc - 1 << endl;
         return 1;
     }
-    int sleepTime;
-    int producer;
-    int consumer; 
+    
+    int sleepTime = atoi(argv[1]);
+    int producers = atoi(argv[2]);
+    int consumers = atoi(argv[3]);
+
     /* TODO: 2. Initialize buffer and synchronization primitives */
+    pthread_mutex_init(&_mutex, NULL);
+    // Initialized empty semaphore
+    sem_init(&_empty, 0, 5);
+    // Initialized full semaphore
+    sem_init(&_full, 0, 0);
+    
+    pthread_t producerThreads[producers];
+    pthread_t consumerThreads[consumers];
+
     /* TODO: 3. Create producer thread(s).
      * You should pass an unique int ID to each producer thread, starting from 1 to number of threads */
+    for (int i = 0; i < producers; i++) {
+        pthread_create(&producerThreads[i], NULL, &producer, (void *) &i);
+    }
+
     /* TODO: 4. Create consumer thread(s) */
+    for (int i = 0; i < consumers; i++) {
+        pthread_create(&consumerThreads[i], NULL, &consumer, NULL);
+    }
+
     /* TODO: 5. Main thread sleep */
+    sleep(sleepTime);
+
     /* TODO: 6. Exit */
+    return 0;
 }
