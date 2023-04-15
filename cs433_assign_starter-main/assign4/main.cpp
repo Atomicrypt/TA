@@ -73,7 +73,7 @@ void *consumer(void *param) {
 }
 
 int main(int argc, char *argv[]) {
-    /* TODO: 1. Get command line arguments argv[1],argv[2],argv[3] */
+    /*1. Get command line arguments argv[1],argv[2],argv[3] */
     srand(time(NULL));
     if (argc != 4) {
         cout << "Expected 3 arguments, received " << argc - 1 << endl;
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     int producers = atoi(argv[2]);
     int consumers = atoi(argv[3]);
 
-    /* TODO: 2. Initialize buffer and synchronization primitives */
+    /* 2. Initialize buffer and synchronization primitives */
     pthread_mutex_init(&_mutex, NULL);
     // Initialized empty semaphore
     sem_init(&_empty, 0, 5);
@@ -94,20 +94,20 @@ int main(int argc, char *argv[]) {
     pthread_t producerThreads[producers];
     pthread_t consumerThreads[consumers];
 
-    /* TODO: 3. Create producer thread(s).
+    /* 3. Create producer thread(s).
      * You should pass an unique int ID to each producer thread, starting from 1 to number of threads */
     for (int i = 0; i < producers; i++) {
         pthread_create(&producerThreads[i], NULL, &producer, (void *) &i);
     }
 
-    /* TODO: 4. Create consumer thread(s) */
+    /* 4. Create consumer thread(s) */
     for (int i = 0; i < consumers; i++) {
         pthread_create(&consumerThreads[i], NULL, &consumer, NULL);
     }
 
-    /* TODO: 5. Main thread sleep */
+    /* 5. Main thread sleep */
     sleep(sleepTime);
 
-    /* TODO: 6. Exit */
+    /* 6. Exit */
     return 0;
 }
