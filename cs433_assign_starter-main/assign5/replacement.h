@@ -22,7 +22,13 @@ protected:      // subclasses can access these members
     // Member variable for the page table
     PageTable page_table;
 	// TODO: Add additional member variables to this class
-	
+    int numReplacements;    //number of replacements
+    int numFaults;      //number of faults
+    int numRefs;    //number of references
+
+    int totalPages;     //total number of pages
+    int totalFrames;    //total number of frames
+
 public:
 	/**
 	 * @brief 
