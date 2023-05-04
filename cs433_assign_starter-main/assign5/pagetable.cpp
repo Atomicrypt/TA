@@ -10,9 +10,7 @@
 
 #include "pagetable.h"
 
-// TODO: Add your implementation of PageTable
-// Constrcutor
-// TODO: Add your code
+// Constructor
 PageTable::PageTable(int num_pages) {
 
     //push entrypage objects into "pages" vector
@@ -25,8 +23,8 @@ PageTable::PageTable(int num_pages) {
 }
 
 // Destructor
-// TODO: Add your code
 PageTable::~PageTable() {
+    //releasing page table
     while(!pages.empty())
     {
         pages.pop_back();
