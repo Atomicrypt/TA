@@ -162,4 +162,7 @@ int main(int argc, char *argv[]) {
     elapsed_time3 = (end3 - start3) / double(CLOCKS_PER_SEC);
     std::cout << "Elapsed time = " << elapsed_time3 << " seconds" << std::endl;
 
+    delete vm2;
+    delete vm3;
+    delete vm4;
 }
