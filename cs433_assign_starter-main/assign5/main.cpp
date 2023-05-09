@@ -106,7 +106,6 @@ int main(int argc, char *argv[]) {
         std::cerr << "Cannot open large_refs.txt to read. Please check your path." << std::endl;
         return 1;
     }
-    //int val2;
     // Create a vector to store the logical addresses
     std::vector<int> large_refs;
     while (in2 >> val) {
@@ -117,7 +116,7 @@ int main(int argc, char *argv[]) {
     FIFOReplacement *vm2 = new FIFOReplacement(num_pages, num_frames);
     for (std::vector<int>::const_iterator it = large_refs.begin(); it != large_refs.end(); ++it) {
         int page_num = (*it) >> page_offset_bits;
-        bool isPageFault = fifo.access_page(page_num, 0);
+        bool isPageFault = vm2->access_page(page_num, 0);
         PageEntry pg = vm2->getPageEntry(page_num);
     }
 
