@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file pagetable.h
- * @author ??? (TODO: your name)
+ * @author Alex Nelson, Tyler Felicidario
  * @brief This class represents a traditional pagetable data structure.
  * @version 0.1
  */
@@ -47,8 +47,6 @@ public:
     PageTable(int num_pages);
     // Destructor
     ~PageTable();
-
-	// TODO: Add your implementation of the page table here
 
     /**
      * @brief Access a page in the page table.

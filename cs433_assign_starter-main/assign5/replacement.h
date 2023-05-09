@@ -25,9 +25,11 @@ protected:      // subclasses can access these members
     int numReplacements;    //number of replacements
     int numFaults;      //number of faults
     int numRefs;    //number of references
-
+    
     int totalPages;     //total number of pages
     int totalFrames;    //total number of frames
+
+    int frameCount;
 
 public:
 	/**

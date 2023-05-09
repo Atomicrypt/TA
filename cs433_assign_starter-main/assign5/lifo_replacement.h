@@ -1,25 +1,24 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file lifo_replacement.h
- * @author ??? (TODO: your name)
+ * @author Alex Nelson, Tyler Felicidario
  * @brief A class implementing the LIFO page replacement algorithms
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
 
 #pragma once
 
-// Remember to add comments to your code
-
 #include "replacement.h"
+#include <stack>
 
 /**
  * @brief A class to simulate LIFO (last in first out) page replacement algorithm.
  */
 class LIFOReplacement : public Replacement {
 private:
-    // TODO: Add necessary member variables to this class
+    stack<int> page_stack;
+    int max_frames;
+    int num_frames;
 
 public:
     /**
