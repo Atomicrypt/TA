@@ -31,7 +31,6 @@ int FIFOReplacement::replace_page(int page_num) {
     page_queue.push(page_num);
     page_table[page_num].valid = true;
     page_table[front_num].valid = false;
-    //numFaults++;
-
+    
     return 0;
 }

@@ -17,8 +17,6 @@
 class LIFOReplacement : public Replacement {
 private:
     stack<int> page_stack;
-    int max_frames;
-    int num_frames;
 
 public:
     /**
