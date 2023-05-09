@@ -5,8 +5,7 @@
  * @brief A base class for different page replacement algorithms.
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
+
 #pragma once
 
 #include "pagetable.h"
@@ -21,10 +20,10 @@ class Replacement
 protected:      // subclasses can access these members
     // Member variable for the page table
     PageTable page_table;
-	// TODO: Add additional member variables to this class
+	
     int numReplacements;    //number of replacements
-    int numFaults;      //number of faults
-    int numRefs;    //number of references
+    int numFaults;          //number of faults
+    int numRefs;            //number of references
     
     int totalPages;     //total number of pages
     int totalFrames;    //total number of frames
@@ -44,8 +43,7 @@ public:
      */
     virtual ~Replacement();
 
-	// TODO: Add additional member variables and functions if needed
-    /**
+	/**
 	 * @brief Simulate a single page access.
      * @details If the page is valid, it calls the touch_page function. 
      *          If the page is not valid but free frames are available, it calls the load_page function.

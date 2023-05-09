@@ -5,12 +5,10 @@
  * @brief This class represents a traditional pagetable data structure.
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
 
 #pragma once
 
-// Remember to add comments to your code
+
 #include <vector>
 using namespace std;
 

@@ -1,5 +1,3 @@
-// Remember to add comments to your code
-
 #include <iostream>
 #include <fstream>
 #include <cstdlib>

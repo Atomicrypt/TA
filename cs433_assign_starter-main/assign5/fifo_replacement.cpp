@@ -8,6 +8,7 @@
 
 #include "fifo_replacement.h"
 
+
 FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {

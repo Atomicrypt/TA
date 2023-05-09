@@ -8,6 +8,7 @@
 
 #include "lifo_replacement.h"
 
+
 LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {

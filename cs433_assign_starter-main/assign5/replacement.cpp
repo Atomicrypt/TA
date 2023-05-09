@@ -1,28 +1,25 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file replacement.cpp
- * @author ??? (TODO: your name)
+ * @author Alex Nelson, Tyler Felicidario
  * @brief A base class for different page replacement algorithms.
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
+
 #include <iostream>
 #include "replacement.h"
 
-// TODO: Add your implementation of the Replacement member functions here
 
 // Constructor
 Replacement::Replacement(int num_pages, int num_frames)
 : page_table(num_pages)
 {
-	//TODO: Add your implementation here
-    numReplacements = 0;    //number of replacements
-    numFaults = 0;      //number of faults
-    numRefs = 0;    //number of references
+	numReplacements = 0;    //number of replacements
+    numFaults = 0;          //number of faults
+    numRefs = 0;            //number of references
 
     totalPages = num_pages;     //total number of pages
-    totalFrames = num_frames;    //total number of frames
+    totalFrames = num_frames;   //total number of frames
 
     frameCount = 0;
 }
@@ -30,7 +27,7 @@ Replacement::Replacement(int num_pages, int num_frames)
 // Destructor
 Replacement::~Replacement()
 {
-    // TOOD: Add your code here
+    
 }
 
 // Simulate a single page access 
@@ -43,7 +40,7 @@ bool Replacement::access_page(int page_num, bool is_write)
     if (page_table[page_num].valid == true) {
         touch_page(page_num);
         
-        //return true;
+        return true;
     }
     // If the page is not valid but free frames are available, it calls the load_page function.
     if (page_table[page_num].valid == false && frameCount < totalFrames) {
